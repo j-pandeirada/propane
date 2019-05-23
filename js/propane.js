@@ -199,7 +199,7 @@ function handleDownButton(){
     //unless its the last item in list -> with nextElementSibling null
     //if last item from list, insert before first item(index 3)
     if(item.nextElementSibling == null){
-        itemlist.insertBefore(item,itemlist.childNodes[3]);
+        itemlist.insertBefore(item,itemlist.childNodes[1]);
     }
     else{
         itemlist.insertBefore(item.nextElementSibling,item);
@@ -286,9 +286,6 @@ function handleLeftButton(){
 }
 
 ///////////////////////////////////////////////////////////////////
-
-//current bug:
-//  downbutton for last item only works for todo list
 
 //things to add:
 //add task with button and enter
