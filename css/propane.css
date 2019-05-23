@@ -1,0 +1,104 @@
+.container{
+    margin-top:15px;
+}
+
+.todo-container{
+    /*border-style: solid;
+    border-width: 3px;
+    border-color: blue;*/
+    border-radius: 25px;
+    padding: 20px;
+    box-shadow: 0px 0px 8px blue;
+}
+
+.doing-container{
+    border-radius: 25px;
+    padding: 20px;
+    box-shadow: 0px 0px 8px red;
+}
+
+.done-container{
+    border-radius: 25px;
+    padding: 20px;
+    box-shadow: 0px 0px 8px green;
+}
+
+.todo-list{
+    list-style-type: none;
+    list-style-position: inside;
+    margin: 0;
+    padding: 0;
+    display:inline-block;
+    width: 100%;
+}
+
+.todo-container li.todo-item{
+    height:50px;
+    position: relative;
+    box-shadow: 0px 1px 2px;
+    background: white;
+    border-style: solid;
+    border-width: 1px;
+    border-color: blue;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top:5px;
+}
+
+.doing-container li.todo-item{
+    height:50px;
+    position: relative;
+    box-shadow: 0px 1px 2px;
+    background: white;
+    border-style: solid;
+    border-width: 1px;
+    border-color: red;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top:5px;
+}
+
+.done-container li.todo-item{
+    height:50px;
+    position: relative;
+    box-shadow: 0px 1px 2px;
+    background: white;
+    border-style: solid;
+    border-width: 1px;
+    border-color: green;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top:5px;
+}
+
+li.todo-item .task-text-container{
+    float:left;
+}
+
+li.todo-item .todo-button-panel,.doing-button-panel,.done-button-panel{
+    float:right;
+}
+
+.todo-button-panel .btn{
+    padding: 2px 2px;
+}
+
+.todo-button-panel .btn:hover{
+    color:blue;
+}
+
+.doing-button-panel .btn{
+    padding: 2px 2px;
+}
+
+.doing-button-panel .btn:hover{
+    color:red;
+}
+
+.done-button-panel .btn{
+    padding: 2px 2px;
+}
+
+.done-button-panel .btn:hover{
+    color:green;
+}

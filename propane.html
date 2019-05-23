@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--Import bootstrap,fontawesome and project css files-->
+    <link rel="stylesheet" href="css_bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="fontawesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="css/propane.css">
+  </head>
+
+  <body>
+    <!--Navbar Code-->
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+          <a class="navbar-brand" href="#">
+              <span class="fas fa-tasks" aria-hidden="true"></span>
+              Propane
+          </a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+              
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Projects
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="#">Project1</a>
+                  <a class="dropdown-item" href="#">Project2</a>
+                  <a class="dropdown-item" href="#">Project3</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="#">Add Project</a>
+                </div>
+              </li>
+
+              <li class="nav-item">
+                  <a class="nav-link disabled" href="#">Current Project</a>
+                </li>
+            
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+              <input class="form-control mr-sm-2" id="task-textfield" type="search" placeholder="Add Task" aria-label="Search">
+              <button type="button" class="btn btn-success" id="add-button" type="button">
+                  <span class="fa fa-plus-square" aria-hidden="true"></span>
+              </button>
+            </form>
+          </div>
+      </nav>
+
+    <!--Main container Code-->
+    <div class="container">
+        <div class="row">
+          <!--Left container with the TODO List-->
+            <div class="col">
+              <div class="todo-container">
+                <h1>To Do</h1>
+                  <ul class="todo-list">
+                    <!--
+                    <li class="todo-item" id="1">
+                      <div class="task-text-container">
+                        Primeira Tarefa
+                      </div>
+                      <div class="todo-button-panel">
+                        <button type="button" class="btn">
+                          <span class="fas fa-arrow-circle-up" aria-hidden="true"></span>
+                        </button>
+                        <button type="button" class="btn">
+                          <span class="fas fa-arrow-circle-down" aria-hidden="true"></span>
+                        </button>
+                        <button type="button" class="btn">
+                          <span class="fas fa-arrow-circle-right" aria-hidden="true"></span>
+                        </button>
+                        <button type="button" class="btn remove-btn">
+                          <span class="fas fa-trash" aria-hidden="true"></span>
+                        </button>
+                      </div>
+                    </li>
+                    -->
+                  </ul>
+              </div>
+            </div>
+          <!--Middle container with the DOING List-->
+            <div class="col">
+              <div class="doing-container">
+                  <h1>Doing</h1>
+                  <ul class="todo-list">
+                  </ul>              
+              </div>
+            </div>
+          <!--Left container with the DONE List-->
+            <div class="col">
+              <div class="done-container">
+                  <h1>Done</h1>
+                  <ul class="todo-list">
+                  </ul> 
+              </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    <!--JQuery JS -->
+    <script src="js/jquery-3.3.1.slim.min.js"></script>
+    <!--Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <!--Bootstrap JS -->
+    <script src="js_bootstrap/bootstrap.min.js"></script> 
+    <!--Project JS -->
+    <script src="js/propane.js"></script>
+  </body>
+</html>
