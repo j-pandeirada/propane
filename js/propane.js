@@ -1,5 +1,4 @@
 var id_inc = 0;
-var temp;
 /*
 task_obj = createTaskObject("wll");
 list_item = createTodoListElem(task_obj);
@@ -25,7 +24,102 @@ document.getElementById("add-button").onclick = function(){
         list_item = createTodoListElem(task_obj);
         moveItemToList(task_obj.status,list_item);
         task_arr.push(task_obj);
+        //clear textbox
+        document.getElementById("task-textfield").value = "";
     }
+}
+
+//given id,inserted text, and status, create task object
+function createTaskObject(task_text,id,status){
+    var task = {
+        text: task_text,
+        id: id,
+        status: status
+    };
+
+    return task;
+}
+
+//create the todoitem li element
+function createTodoListElem(task_obj){
+    
+    //create the li object
+    var item = document.createElement("li");
+    item.setAttribute("class","todo-item");
+    item.setAttribute("id",task_obj.id);
+    //text div
+    var text_div = document.createElement("div");
+    text_div.setAttribute("class","task-text-container");
+    text_div.innerHTML = task_obj.text;
+    //button panel div
+    button_panel = createButtonPanelDiv(task_obj.status);
+    //glue stuff to get complete todoitem
+    item.appendChild(text_div);
+    item.appendChild(button_panel);
+
+    return item;
+}
+
+//add li element to the correct container
+function moveItemToList(status,item){
+    //use task_obj.status to select the column:todo,doing,done - container
+    //put it inside the correct container
+    if(status == "todo"){
+        container = document.querySelector(".todo-container");
+    } else if(status == "doing"){
+        container = document.querySelector(".doing-container");
+    } else if(status == "done"){
+        container = document.querySelector(".done-container");
+    }
+
+    todo_list = container.querySelector(".todo-list");
+    todo_list.appendChild(item);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////// BUTTON CREATION AND HANDLING////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+
+
+//create button panel div given a task_status
+function createButtonPanelDiv(status){
+    var button_panel = document.createElement("div");
+    button_panel.appendChild(createUpButton());
+    button_panel.appendChild(createDownButton());
+    if(status == "todo"){
+        button_panel.setAttribute("class","todo-button-panel");
+        button_panel.appendChild(createRightButton());
+    } else if(status == "doing"){
+        button_panel.setAttribute("class","doing-button-panel");
+        button_panel.appendChild(createLeftButton());
+        button_panel.appendChild(createRightButton());
+    } else if(status == "done"){
+        button_panel.setAttribute("class","done-button-panel");
+        button_panel.appendChild(createLeftButton());
+    }
+    button_panel.appendChild(createRemoveButton());
+    return button_panel;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////
+///////////FUNCTIONS TO CREATE DIFFERENT BUTTONS AND HANDLE THEM////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
+
+
+/////////remove button////////////////////////////////////////////
+function createRemoveButton(){
+    button = document.createElement("button");
+    button.setAttribute("type","button");
+    button.setAttribute("class","btn remove-btn");
+
+    span = document.createElement("span");
+    span.setAttribute("class","fas fa-trash");
+    span.setAttribute("aria-hidden","true");
+
+    button.appendChild(span);
+    button.addEventListener('click',handleRemoveButton);
+
+    return button;
 }
 
 //function handler for when a remove button gets clicked
@@ -35,6 +129,24 @@ function handleRemoveButton(){
     var parent = item.parentNode;
     //remove that item from the current list
     parent.removeChild(item);
+}
+
+///////////////////////////////////////////////////////////////////
+
+/////////up button/////////////////////////////////////////////////
+function createUpButton(){
+    button = document.createElement("button");
+    button.setAttribute("type","button");
+    button.setAttribute("class","btn up-btn");
+
+    span = document.createElement("span");
+    span.setAttribute("class","fas fa-arrow-circle-up");
+    span.setAttribute("aria-hidden","true");
+
+    button.appendChild(span);
+    button.addEventListener('click',handleUpButton);
+
+    return button;
 }
 
 //function handler for when a up button gets clicked
@@ -54,6 +166,24 @@ function handleUpButton(){
     else{
         itemlist.insertBefore(item,item.previousElementSibling);
     }
+}
+
+///////////////////////////////////////////////////////////////////
+
+/////////down button///////////////////////////////////////////////
+function createDownButton(){
+    button = document.createElement("button");
+    button.setAttribute("type","button");
+    button.setAttribute("class","btn down-btn");
+
+    span = document.createElement("span");
+    span.setAttribute("class","fas fa-arrow-circle-down");
+    span.setAttribute("aria-hidden","true");
+
+    button.appendChild(span);
+    button.addEventListener('click',handleDownButton);
+
+    return button;
 }
 
 //function handler for when a down button gets clicked
@@ -76,7 +206,24 @@ function handleDownButton(){
     }
 }
 
-//function handler for when a left button gets clicked
+///////////////////////////////////////////////////////////////////
+
+/////////right button//////////////////////////////////////////////
+function createRightButton(){
+    button = document.createElement("button");
+    button.setAttribute("type","button");
+    button.setAttribute("class","btn right-btn");
+
+    span = document.createElement("span");
+    span.setAttribute("class","fas fa-arrow-circle-right");
+    span.setAttribute("aria-hidden","true");
+
+    button.appendChild(span);
+    button.addEventListener('click',handleRightButton);
+    return button;
+}
+
+//function handler for when a right button gets clicked
 function handleRightButton(){
     //remove from current list
     //get the list item where the button is included
@@ -96,6 +243,24 @@ function handleRightButton(){
 
     list_item = createTodoListElem(task_obj);
     moveItemToList(task_obj.status,list_item);
+}
+
+///////////////////////////////////////////////////////////////////
+
+
+/////////left button///////////////////////////////////////////////
+function createLeftButton(){
+    button = document.createElement("button");
+    button.setAttribute("type","button");
+    button.setAttribute("class","btn left-btn");
+
+    span = document.createElement("span");
+    span.setAttribute("class","fas fa-arrow-circle-left");
+    span.setAttribute("aria-hidden","true");
+
+    button.appendChild(span);
+    button.addEventListener('click',handleLeftButton);
+    return button;
 }
 
 //function handler for when a left button gets clicked
@@ -120,152 +285,10 @@ function handleLeftButton(){
     moveItemToList(task_obj.status,list_item);
 }
 
-//given the current id counter and inserted text, create task object
-function createTaskObject(task_text,id,status){
-    var task = {
-        text: task_text,
-        id: id,
-        status: status
-    };
-
-    return task;
-}
-
-//add li element to the correct container
-function moveItemToList(status,item){
-    //use task_obj.status to select the column:todo,doing,done - container
-    //put it inside the correct container
-    if(status == "todo"){
-        container = document.querySelector(".todo-container");
-    } else if(status == "doing"){
-        container = document.querySelector(".doing-container");
-    } else if(status == "done"){
-        container = document.querySelector(".done-container");
-    }
-
-    todo_list = container.querySelector(".todo-list");
-    todo_list.appendChild(item);
-}
-
-//create the todoitem li element
-function createTodoListElem(task_obj){
-    
-    //create the li object
-    var item = document.createElement("li");
-    item.setAttribute("class","todo-item");
-    item.setAttribute("id",task_obj.id);
-    //text div
-    var text_div = document.createElement("div");
-    text_div.setAttribute("class","task-text-container");
-    text_div.innerHTML = task_obj.text;
-    //button panel div
-    button_panel = createButtonPanelDiv(task_obj.status);
-    //glue stuff to get complete todoitem
-    item.appendChild(text_div);
-    item.appendChild(button_panel);
-
-    return item;
-}
-
-//create button panel div given a task_status
-function createButtonPanelDiv(status){
-    var button_panel = document.createElement("div");
-    button_panel.appendChild(createUpButton());
-    button_panel.appendChild(createDownButton());
-    if(status == "todo"){
-        button_panel.setAttribute("class","todo-button-panel");
-        button_panel.appendChild(createRightButton());
-    } else if(status == "doing"){
-        button_panel.setAttribute("class","doing-button-panel");
-        button_panel.appendChild(createLeftButton());
-        button_panel.appendChild(createRightButton());
-    } else if(status == "done"){
-        button_panel.setAttribute("class","done-button-panel");
-        button_panel.appendChild(createLeftButton());
-    }
-    button_panel.appendChild(createRemoveButton());
-    return button_panel;
-}
-
-//small functions to create each task button
-
-function createRemoveButton(){
-    button = document.createElement("button");
-    button.setAttribute("type","button");
-    button.setAttribute("class","btn remove-btn");
-
-    span = document.createElement("span");
-    span.setAttribute("class","fas fa-trash");
-    span.setAttribute("aria-hidden","true");
-
-    button.appendChild(span);
-    button.addEventListener('click',handleRemoveButton);
-
-    return button;
-}
-
-function createUpButton(){
-    button = document.createElement("button");
-    button.setAttribute("type","button");
-    button.setAttribute("class","btn up-btn");
-
-    span = document.createElement("span");
-    span.setAttribute("class","fas fa-arrow-circle-up");
-    span.setAttribute("aria-hidden","true");
-
-    button.appendChild(span);
-    button.addEventListener('click',handleUpButton);
-
-    return button;
-}
-
-function createDownButton(){
-    button = document.createElement("button");
-    button.setAttribute("type","button");
-    button.setAttribute("class","btn down-btn");
-
-    span = document.createElement("span");
-    span.setAttribute("class","fas fa-arrow-circle-down");
-    span.setAttribute("aria-hidden","true");
-
-    button.appendChild(span);
-    button.addEventListener('click',handleDownButton);
-
-    return button;
-}
-
-function createRightButton(){
-    button = document.createElement("button");
-    button.setAttribute("type","button");
-    button.setAttribute("class","btn right-btn");
-
-    span = document.createElement("span");
-    span.setAttribute("class","fas fa-arrow-circle-right");
-    span.setAttribute("aria-hidden","true");
-
-    button.appendChild(span);
-    button.addEventListener('click',handleRightButton);
-    return button;
-}
-
-function createLeftButton(){
-    button = document.createElement("button");
-    button.setAttribute("type","button");
-    button.setAttribute("class","btn left-btn");
-
-    span = document.createElement("span");
-    span.setAttribute("class","fas fa-arrow-circle-left");
-    span.setAttribute("aria-hidden","true");
-
-    button.appendChild(span);
-    button.addEventListener('click',handleLeftButton);
-    return button;
-}
+///////////////////////////////////////////////////////////////////
 
 //current bug:
 //  downbutton for last item only works for todo list
 
 //things to add:
-//reorganize js code
-//clear textbox when task added
 //add task with button and enter
