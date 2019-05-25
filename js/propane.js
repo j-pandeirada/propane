@@ -1,19 +1,120 @@
 var id_inc = 0;
+
 /*
-task_obj = createTaskObject("wll");
-list_item = createTodoListElem(task_obj);
-moveItemToList(task_obj.status,list_item);
+var task1 = createTaskObject("queijo",id_inc,"todo");id_inc=id_inc+1;
+var task2 = createTaskObject("cebola",id_inc,"todo");id_inc=id_inc+1;
+var task3 = createTaskObject("amor",id_inc,"doing");id_inc=id_inc+1;
+var task4 = createTaskObject("coragem",id_inc,"doing");id_inc=id_inc+1;
+var task5 = createTaskObject("sabor",id_inc,"doing");id_inc=id_inc+1;
+var task6 = createTaskObject("lol",id_inc,"done");id_inc=id_inc+1;
 
-task_obj = createTaskObject("2");
-list_item = createTodoListElem(task_obj);
-moveItemToList(task_obj.status,list_item);
-
-task_obj = createTaskObject("qqqposo");
-list_item = createTodoListElem(task_obj);
-moveItemToList(task_obj.status,list_item);
+var project_obj ={
+    name:"Project 1",
+    todo_list:[task1,task2],
+    doing_list:[task3,task4,task5],
+    done_list:[task6]     
+};
 */
 
-var task_arr = [];
+
+
+//as long as the page loads OR project is selected:
+//get project object from localstorage
+var retrievedObject = localStorage.getItem('Project 1');
+var project_obj = JSON.parse(retrievedObject);
+
+loadProject(project_obj);
+
+
+//when app is closed OR project changes
+//refresh current project object:
+    //refresh lists
+    //save object in localstorage
+        //localStorage.setItem('proj1', JSON.stringify(project_obj));
+
+
+
+window.onbeforeunload = function(){
+    //refresh project object
+    project_obj = saveProject(project_obj);
+    //save it in localstorage
+    localStorage.setItem(project_obj.name, JSON.stringify(project_obj));
+}
+
+
+//gathers displayed information in webpage,in order to refresh project object
+function saveProject(proj){
+    //refresh project name
+    ///????
+
+    //for each list, refresh object list field
+    proj.todo_list=[];
+    proj.doing_list=[];
+    proj.done_list=[];
+
+    container = document.querySelector(".todo-container");
+    todo_list = container.querySelector(".todo-list");
+    
+    for(var i=0;i<todo_list.childNodes.length;i++){
+        var item = todo_list.childNodes[i];
+        var task_text = item.childNodes[0].childNodes[0].data;
+        proj.todo_list.push(createTaskObject(task_text,item.id,"todo"));
+    }
+
+    container = document.querySelector(".doing-container");
+    todo_list = container.querySelector(".todo-list");
+    
+    for(var i=0;i<todo_list.childNodes.length;i++){
+        var item = todo_list.childNodes[i];
+        var task_text = item.childNodes[0].childNodes[0].data;
+        proj.doing_list.push(createTaskObject(task_text,item.id,"doing"));
+    }
+
+    container = document.querySelector(".done-container");
+    todo_list = container.querySelector(".todo-list");
+    
+    for(var i=0;i<todo_list.childNodes.length;i++){
+        var item = todo_list.childNodes[i];
+        var task_text = item.childNodes[0].childNodes[0].data;
+        proj.todo_list.push(createTaskObject(task_text,item.id,"done"));
+    }
+
+    return proj;
+}
+
+
+//when project gets selected, this function populates all lists in webpage
+function loadProject(proj){
+    
+    //clear current lists
+    container = document.querySelector(".todo-container");
+    todo_list = container.querySelector(".todo-list");
+    todo_list.innerHTML="";
+
+    container = document.querySelector(".doing-container");
+    todo_list = container.querySelector(".todo-list");
+    todo_list.innerHTML="";
+
+    container = document.querySelector(".done-container");
+    todo_list = container.querySelector(".todo-list");
+    todo_list.innerHTML="";
+
+    //populate lists with new project
+    for (var i=0;i<proj.todo_list.length;i++){
+        list_item = createTodoListElem(proj.todo_list[i]);
+        moveItemToList(proj.todo_list[i].status,list_item);
+    }
+
+    for (var i=0;i<proj.doing_list.length;i++){
+        list_item = createTodoListElem(proj.doing_list[i]);
+        moveItemToList(proj.doing_list[i].status,list_item);
+    }
+
+    for (var i=0;i<proj.done_list.length;i++){
+        list_item = createTodoListElem(proj.done_list[i]);
+        moveItemToList(proj.done_list[i].status,list_item);
+    }
+}
 
 //handle add button -> add new task to todo list of current project
 document.getElementById("add-button").onclick = function(){
@@ -23,7 +124,6 @@ document.getElementById("add-button").onclick = function(){
         task_obj = createTaskObject(task_text,id_inc,"todo");
         list_item = createTodoListElem(task_obj);
         moveItemToList(task_obj.status,list_item);
-        task_arr.push(task_obj);
         //clear textbox
         document.getElementById("task-textfield").value = "";
     }
