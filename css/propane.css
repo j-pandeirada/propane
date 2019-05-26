@@ -102,3 +102,7 @@ li.todo-item .todo-button-panel,.doing-button-panel,.done-button-panel{
 .done-button-panel .btn:hover{
     color:green;
 }
+
+.dropdown-item:hover{
+    cursor:pointer;
+}
