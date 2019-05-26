@@ -57,6 +57,17 @@ window.onbeforeunload = function(){
     saveAndSetProject(project_obj);
 }
 
+
+//handle add button -> add new task to todo list of current project
+document.getElementById("project-button").onclick = function(){
+    const name = document.getElementById("project-textfield").value;
+    addProject(name);
+    //jquery, ewh, replace with vanilla js when possible
+    $('#addprojectmodal').modal('hide');
+}
+
+
+
 //higher level function to create project:
     //creates:object, dropdown_item, saves everything
 function addProject(name){
@@ -470,4 +481,9 @@ function handleLeftButton(){
 ///////////////////////////////////////////////////////////////////
 
 //things to add:
+//add remove project button
 //add task with button and enter
+//refactor code
+//deal with first time run
+//refactor code
+
