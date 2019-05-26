@@ -16,14 +16,33 @@ var project_obj ={
 };
 */
 
+//////////////////////////////THINGS TO DO WHEN APP OPENS//////////////////////////////
+
+//check if its the first time the app is opened in this browser
+
+
+
+//load project names archive from localstorage
+//proj_names is global
+var retrievedObject = localStorage.getItem("names");
+var proj_names = JSON.parse(retrievedObject);
+//var proj_names = ['tese!','proj1','proj2'];
+
+//fill dropdown menu with project names
+for(i=0;i<proj_names.length;i++){
+    createProjectItem(proj_names[i]);
+}
+
+//load first project in archive
+var retrievedObject = localStorage.getItem(proj_names[0]);
+//project_obj is global variable that should be set to project for preview and edit
+var project_obj = JSON.parse(retrievedObject);
+loadProject(project_obj);
 
 
 //as long as the page loads OR project is selected:
 //get project object from localstorage
-var retrievedObject = localStorage.getItem('Project 1');
-var project_obj = JSON.parse(retrievedObject);
 
-loadProject(project_obj);
 
 
 //when app is closed OR project changes
@@ -33,13 +52,73 @@ loadProject(project_obj);
         //localStorage.setItem('proj1', JSON.stringify(project_obj));
 
 
-
+//save last open project when exiting the app
 window.onbeforeunload = function(){
+    saveAndSetProject(project_obj);
+}
+
+//higher level function to create project:
+    //creates:object, dropdown_item, saves everything
+function addProject(name){
+    //create object
+    new_proj_obj = createProjectObj(name);
+    //save it in localstorage
+    localStorage.setItem(new_proj_obj.name, JSON.stringify(new_proj_obj));
+    //add dropdown item
+    createProjectItem(new_proj_obj.name);
+    //add it to the project names archive and save
+    proj_names.push(new_proj_obj.name);
+    localStorage.setItem("names", JSON.stringify(proj_names));
+}
+
+//change to project with name passed as argument
+function changeToProject(name){
+    //save current project
+    saveAndSetProject(project_obj);
+    //load new project
+    var retrievedObject = localStorage.getItem(name);
+    project_obj = JSON.parse(retrievedObject);
+    loadProject(project_obj);
+}
+
+//create HTML dropdown-item for each project
+function createProjectItem(name){
+    drop_menu = document.querySelector(".dropdown-menu");
+    proj_item = document.createElement("a");
+    proj_item.setAttribute("class","dropdown-item")
+    proj_item.innerHTML = name;
+    proj_item.addEventListener('click',handleDropDownItem);
+    divider = drop_menu.childNodes[drop_menu.childNodes.length-4];
+    drop_menu.insertBefore(proj_item,divider);
+}
+
+//when dropdown item gets clicked, go to new project
+function handleDropDownItem(){
+    changeToProject(this.innerHTML);
+}
+
+
+//creates new object for new project
+function createProjectObj(name){
+    var project_obj ={
+        name:name,
+        task_id_inc:0,
+        todo_list:[],
+        doing_list:[],
+        done_list:[]     
+    };
+
+    return project_obj;
+}
+
+//saves current state of project in localstorage
+function saveAndSetProject(project_obj){
     //refresh project object
     project_obj = saveProject(project_obj);
     //save it in localstorage
     localStorage.setItem(project_obj.name, JSON.stringify(project_obj));
 }
+
 
 
 //gathers displayed information in webpage,in order to refresh project object
@@ -76,7 +155,7 @@ function saveProject(proj){
     for(var i=0;i<todo_list.childNodes.length;i++){
         var item = todo_list.childNodes[i];
         var task_text = item.childNodes[0].childNodes[0].data;
-        proj.todo_list.push(createTaskObject(task_text,item.id,"done"));
+        proj.done_list.push(createTaskObject(task_text,item.id,"done"));
     }
 
     return proj;
@@ -86,6 +165,9 @@ function saveProject(proj){
 //when project gets selected, this function populates all lists in webpage
 function loadProject(proj){
     
+    //change name in navbar
+    var placeholder = document.getElementById("placeholder");
+    placeholder.innerHTML = proj.name;
     //clear current lists
     container = document.querySelector(".todo-container");
     todo_list = container.querySelector(".todo-list");
