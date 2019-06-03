@@ -24,13 +24,18 @@ var project_obj ={
 
 //load project names archive from localstorage
 //proj_names is global
+if(localStorage.getItem("names") === null){
+    var proj_names = [];
+    localStorage.setItem("names",JSON.stringify(proj_names));
+}
+
 var retrievedObject = localStorage.getItem("names");
 var proj_names = JSON.parse(retrievedObject);
+
 //var proj_names = ['tese!','proj1','proj2'];
 
-//fill dropdown menu with project names
-for(i=0;i<proj_names.length;i++){
-    createProjectItem(proj_names[i]);
+if(proj_names.length == 0){
+    addProject("Example");
 }
 
 //load first project in archive
@@ -38,6 +43,11 @@ var retrievedObject = localStorage.getItem(proj_names[0]);
 //project_obj is global variable that should be set to project for preview and edit
 var project_obj = JSON.parse(retrievedObject);
 loadProject(project_obj);
+
+//fill dropdown menu with project names
+for(i=0;i<proj_names.length;i++){
+    createProjectItem(proj_names[i]);
+}
 
 
 //as long as the page loads OR project is selected:
@@ -53,20 +63,37 @@ loadProject(project_obj);
 
 
 //save last open project when exiting the app
+//save current names archive
 window.onbeforeunload = function(){
     saveAndSetProject(project_obj);
+    localStorage.setItem("names", JSON.stringify(proj_names));
 }
 
-
-//handle add button -> add new task to todo list of current project
 document.getElementById("project-button").onclick = function(){
     const name = document.getElementById("project-textfield").value;
-    addProject(name);
-    //jquery, ewh, replace with vanilla js when possible
-    $('#addprojectmodal').modal('hide');
+    if(name != ""){
+        addProject(name);
+        //jquery, ewh, replace with vanilla js when possible
+        $('#addprojectmodal').modal('hide');
+        document.getElementById("project-textfield").value="";
+    }
 }
 
+document.getElementById("confirmremove").onclick = function(){
+    removeCurrentProject();
+    location.reload();
+    //jquery, ewh, replace with vanilla js when possible
+    $('#removeprojectmodal').modal('hide');
+}
 
+function removeCurrentProject(){
+    //remove project from names archive
+    var idx = proj_names.indexOf(project_obj.name);
+    proj_names.splice(idx,1);
+    //remove from localstorage
+    localStorage.removeItem(project_obj.name);
+    //save proj_names in localstorage
+}
 
 //higher level function to create project:
     //creates:object, dropdown_item, saves everything
@@ -80,6 +107,7 @@ function addProject(name){
     //add it to the project names archive and save
     proj_names.push(new_proj_obj.name);
     localStorage.setItem("names", JSON.stringify(proj_names));
+    location.reload();
 }
 
 //change to project with name passed as argument
@@ -481,6 +509,7 @@ function handleLeftButton(){
 ///////////////////////////////////////////////////////////////////
 
 //things to add:
+//protect from creation of projects without name
 //add remove project button
 //add task with button and enter
 //refactor code
