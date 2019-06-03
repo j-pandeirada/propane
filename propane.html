@@ -34,7 +34,13 @@
 
               <li class="nav-item">
                   <a class="nav-link disabled" id="placeholder" href="#">Current Project</a>
-                </li>
+              </li>
+              
+              <li class="nav-item">
+                <a class="nav-link" id="removeproject" data-toggle="modal" data-target="#removeprojectmodal">
+                    <span class="fas fa-trash" aria-hidden="true"></span>
+                </a>
+            </li>
             
             </ul>
             <form class="form-inline my-2 my-lg-0">
@@ -76,7 +82,7 @@
         </div>
     </div>
 
-    <!-- Modal -->
+    <!-- Add Project Modal -->
     <div class="modal fade" id="addprojectmodal" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -96,6 +102,24 @@
         </div>
       </div>
     </div>
+
+    <!-- Remove Project Modal -->
+    <div class="modal fade" id="removeprojectmodal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="removeprojectmodalLabel">Are you sure?</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+              <button type="button" class="btn btn-primary" id="confirmremove">Yes</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
     <!--JQuery JS -->
     <script src="js/jquery-3.3.1.slim.min.js"></script>
