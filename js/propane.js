@@ -1,29 +1,9 @@
-var id_inc = 0;
-
-/*
-var task1 = createTaskObject("queijo",id_inc,"todo");id_inc=id_inc+1;
-var task2 = createTaskObject("cebola",id_inc,"todo");id_inc=id_inc+1;
-var task3 = createTaskObject("amor",id_inc,"doing");id_inc=id_inc+1;
-var task4 = createTaskObject("coragem",id_inc,"doing");id_inc=id_inc+1;
-var task5 = createTaskObject("sabor",id_inc,"doing");id_inc=id_inc+1;
-var task6 = createTaskObject("lol",id_inc,"done");id_inc=id_inc+1;
-
-var project_obj ={
-    name:"Project 1",
-    todo_list:[task1,task2],
-    doing_list:[task3,task4,task5],
-    done_list:[task6]     
-};
-*/
-
 //////////////////////////////THINGS TO DO WHEN APP OPENS//////////////////////////////
-
-//check if its the first time the app is opened in this browser
-
-
 
 //load project names archive from localstorage
 //proj_names is global
+
+//if first time use, create and save proj_names
 if(localStorage.getItem("names") === null){
     var proj_names = [];
     localStorage.setItem("names",JSON.stringify(proj_names));
@@ -32,8 +12,7 @@ if(localStorage.getItem("names") === null){
 var retrievedObject = localStorage.getItem("names");
 var proj_names = JSON.parse(retrievedObject);
 
-//var proj_names = ['tese!','proj1','proj2'];
-
+//if first time use, create and save sample project
 if(proj_names.length == 0){
     addProject("Example");
 }
@@ -49,19 +28,6 @@ for(i=0;i<proj_names.length;i++){
     createProjectItem(proj_names[i]);
 }
 
-
-//as long as the page loads OR project is selected:
-//get project object from localstorage
-
-
-
-//when app is closed OR project changes
-//refresh current project object:
-    //refresh lists
-    //save object in localstorage
-        //localStorage.setItem('proj1', JSON.stringify(project_obj));
-
-
 //save last open project when exiting the app
 //save current names archive
 window.onbeforeunload = function(){
@@ -69,6 +35,30 @@ window.onbeforeunload = function(){
     localStorage.setItem("names", JSON.stringify(proj_names));
 }
 
+///////////////////HANDLERS FOR BUTTONS IN NAVBAR///////////////////////////////////
+
+//handle add button -> add new task to todo list of current project
+document.getElementById("add-button").onclick = function(){
+    const task_text = document.getElementById("task-textfield").value;
+    if(task_text != ""){
+        project_obj.task_id_inc = project_obj.task_id_inc + 1;
+        task_obj = createTaskObject(task_text,project_obj.task_id_inc,"todo");
+        list_item = createTodoListElem(task_obj);
+        moveItemToList(task_obj.status,list_item);
+        //clear textbox
+        document.getElementById("task-textfield").value = "";
+    }
+}
+
+//trigger add button when enter gets clicked while writing on addtask textfield
+document.getElementById("task-addform").addEventListener("submit", function(event) {
+      // Cancel the default action, if needed
+      event.preventDefault();
+      // Trigger the button element with a click
+      document.getElementById("add-button").click();
+});
+
+//handle create button inside Add project Modal
 document.getElementById("project-button").onclick = function(){
     const name = document.getElementById("project-textfield").value;
     if(name != ""){
@@ -79,6 +69,7 @@ document.getElementById("project-button").onclick = function(){
     }
 }
 
+//handle remove button inside Remove project Modal
 document.getElementById("confirmremove").onclick = function(){
     removeCurrentProject();
     location.reload();
@@ -86,14 +77,7 @@ document.getElementById("confirmremove").onclick = function(){
     $('#removeprojectmodal').modal('hide');
 }
 
-function removeCurrentProject(){
-    //remove project from names archive
-    var idx = proj_names.indexOf(project_obj.name);
-    proj_names.splice(idx,1);
-    //remove from localstorage
-    localStorage.removeItem(project_obj.name);
-    //save proj_names in localstorage
-}
+/////HIGH LEVEL FUNTIONS TO HANDLE PROJECTS:CREATE,REMOVE and CHANGE TO ANOTHER/////
 
 //higher level function to create project:
     //creates:object, dropdown_item, saves everything
@@ -108,6 +92,15 @@ function addProject(name){
     proj_names.push(new_proj_obj.name);
     localStorage.setItem("names", JSON.stringify(proj_names));
     location.reload();
+}
+
+function removeCurrentProject(){
+    //remove project from names archive
+    var idx = proj_names.indexOf(project_obj.name);
+    proj_names.splice(idx,1);
+    //remove from localstorage
+    localStorage.removeItem(project_obj.name);
+    //save proj_names in localstorage
 }
 
 //change to project with name passed as argument
@@ -131,11 +124,13 @@ function createProjectItem(name){
     drop_menu.insertBefore(proj_item,divider);
 }
 
-//when dropdown item gets clicked, go to new project
+//handler for when project gets select from dropwdown list
 function handleDropDownItem(){
+    //when dropdown item gets clicked, go to new project
     changeToProject(this.innerHTML);
 }
 
+//////FUNCTIONS TO CREATE THE MAIN DATATYPES USED: TASK AND PROJECT/////
 
 //creates new object for new project
 function createProjectObj(name){
@@ -150,6 +145,18 @@ function createProjectObj(name){
     return project_obj;
 }
 
+//given id,inserted text, and status, create task object
+function createTaskObject(task_text,id,status){
+    var task = {
+        text: task_text,
+        id: id,
+        status: status
+    };
+
+    return task;
+}
+
+
 //saves current state of project in localstorage
 function saveAndSetProject(project_obj){
     //refresh project object
@@ -157,7 +164,6 @@ function saveAndSetProject(project_obj){
     //save it in localstorage
     localStorage.setItem(project_obj.name, JSON.stringify(project_obj));
 }
-
 
 
 //gathers displayed information in webpage,in order to refresh project object
@@ -237,29 +243,7 @@ function loadProject(proj){
     }
 }
 
-//handle add button -> add new task to todo list of current project
-document.getElementById("add-button").onclick = function(){
-    const task_text = document.getElementById("task-textfield").value;
-    if(task_text != ""){
-        id_inc = id_inc+1;
-        task_obj = createTaskObject(task_text,id_inc,"todo");
-        list_item = createTodoListElem(task_obj);
-        moveItemToList(task_obj.status,list_item);
-        //clear textbox
-        document.getElementById("task-textfield").value = "";
-    }
-}
 
-//given id,inserted text, and status, create task object
-function createTaskObject(task_text,id,status){
-    var task = {
-        text: task_text,
-        id: id,
-        status: status
-    };
-
-    return task;
-}
 
 //create the todoitem li element
 function createTodoListElem(task_obj){
@@ -509,10 +493,6 @@ function handleLeftButton(){
 ///////////////////////////////////////////////////////////////////
 
 //things to add:
-//protect from creation of projects without name
-//add remove project button
 //add task with button and enter
-//refactor code
-//deal with first time run
 //refactor code
 
